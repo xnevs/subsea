@@ -2,9 +2,10 @@
 
 #include <cstdio>
 
-Node::Node(int _id, int _label) {
+Node::Node(int _id, int _label, int _number) {
 	id = _id;
 	label = _label;
+	number = _number;
 }
 Node::Node(int _id) {
 	id = _id;
@@ -24,6 +25,14 @@ void Node::add_edge(Edge *edge) {
 bool Node::is_connected(Node *node) {
 	for(std::vector<Edge *>::iterator it = edges.begin(); it != edges.end(); it++)
 		if((*it)->get_color() && node == (*it)->get_end())
+			return true;
+	
+	return false;
+}
+
+bool Node::is_connected_id(int _id) {
+	for(std::vector<Edge *>::iterator it = edges.begin(); it != edges.end(); it++)
+		if((*it)->get_color() && _id == (*it)->get_end()->get_id())
 			return true;
 	
 	return false;

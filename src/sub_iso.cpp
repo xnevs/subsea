@@ -19,14 +19,19 @@ int sub_iso(std::set<traverse_history_t> A, Graph *Gl) {
 	
 	bisection(Gl, g1, g2);
 	
+	/*printf("~~~~~~G1~~~~~~~~\n");
+	g1->print();
+	printf("\n");
+	
+	printf("~~~~~~G2~~~~~~~~\n");
+	g2->print();
+	*/
+	
 	for(std::vector<Node *>::iterator it1 = g1->get_nodes().begin(); it1 != g1->get_nodes().end(); it1++) {
 		for(std::vector<Node *>::iterator it2 = g2->get_nodes().begin(); it2 != g2->get_nodes().end(); it2++) {
 			if((*it1)->is_connected(*it2)) {
 				for(std::set<traverse_history_t>::iterator it3 = A.begin(); it3 != A.end(); it3++){
 					std::vector<Graph *> S = search_traverse(Gl, *it1, *it2, *it3);
-					
-					Gl->set_edge_color((*it1)->get_id(), (*it2)->get_id(), false);
-					Gl->set_edge_color((*it2)->get_id(), (*it1)->get_id(), false);
 					
 					num_of_subisomorphisms += S.size();
 					
@@ -36,6 +41,9 @@ int sub_iso(std::set<traverse_history_t> A, Graph *Gl) {
 						printf("----------------------------------------------------\n");
 					}
 				}
+					
+				Gl->set_edge_color((*it1)->get_id(), (*it2)->get_id(), false);
+				Gl->set_edge_color((*it2)->get_id(), (*it1)->get_id(), false);
 			}
 		}
 	}

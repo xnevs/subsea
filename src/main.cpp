@@ -18,9 +18,9 @@ int main(int argc, char *argv[]) {
 	FILE *f = fopen(argv[1], "rb");
 	read_graph(Gl, f);
 
-	Gl->print();
+	/*Gl->print();
 	printf("\n==============================================\n\n");
-
+*/
 
 	//branje majhnega grafa v formatu VFlib
 	Graph *Gs = new Graph();
@@ -32,12 +32,11 @@ int main(int argc, char *argv[]) {
 	printf("\n==============================================\n\n");
 
 
-
 	//algoritem
 	std::set<traverse_history_t> A = all_traverse_histories(Gs);
 	
-	for(std::set<traverse_history_t>::iterator it = A.begin(); it != A.end(); it++)
+	/*for(std::set<traverse_history_t>::iterator it = A.begin(); it != A.end(); it++)
 		print_traverse_history(*it);
-	
+*/
 	printf("num of isomorphisms: %d\n", sub_iso(A, Gl));
 }

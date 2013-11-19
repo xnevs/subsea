@@ -12,7 +12,9 @@ private:
 	int label;
 	std::vector<Edge *> edges;
 public:
-	Node(int _id, int _label);
+	int number;
+
+	Node(int _id, int _label, int _number);
 	Node(int _id);
 
 	int get_id();
@@ -21,6 +23,7 @@ public:
 	void add_edge(Edge *edge);
 
 	bool is_connected(Node *node);
+	bool is_connected_id(int _id);
 	
 	void set_edge_color(Node *n_end, bool color);
 

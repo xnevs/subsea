@@ -16,6 +16,7 @@ public:
 	void init(std::vector<Node *> &_nodes);
 	void add_node();
 	void add_node(int _id, int _label);
+	void add_node(int _id, int _label, int _number);
 	void add_edge(int start, int end);
 	
 	void set_edge_color(int start, int end, bool color);

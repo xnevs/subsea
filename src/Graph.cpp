@@ -8,7 +8,7 @@ Graph::Graph() {}
 
 Graph::Graph(Graph *g) {
 	for(std::vector<Node *>::iterator it = g->nodes.begin(); it != g->nodes.end(); it++)
-		nodes.push_back(new Node((*it)->get_id(), (*it)->get_label()));
+		nodes.push_back(new Node((*it)->get_id(), (*it)->get_label(), (*it)->number));
 		
 	
 	for(std::vector<Node *>::iterator it1 = g->nodes.begin(); it1 != g->nodes.end(); it1++)
@@ -28,7 +28,7 @@ void Graph::init(std::vector<Node *> &_nodes) {
 		nodes.push_back(*it);
 }
 void Graph::add_node() {
-	Node *node = new Node(nodes.size(), 0);
+	Node *node = new Node(nodes.size(), 0, 0);
 	nodes.push_back(node);
 }
 void Graph::add_node(int _id, int _label) {
@@ -37,7 +37,17 @@ void Graph::add_node(int _id, int _label) {
 		if((*it)->get_id() == _id && (*it)->get_label())
 			node = *it;
 	if(node == NULL) {
-		node = new Node(_id, _label);
+		node = new Node(_id, _label, 0);
+		nodes.push_back(node);
+	}
+}
+void Graph::add_node(int _id, int _label, int _number) {
+	Node *node = NULL;
+	for(std::vector<Node *>::iterator it = nodes.begin(); it != nodes.end(); it++)
+		if((*it)->get_id() == _id && (*it)->get_label())
+			node = *it;
+	if(node == NULL) {
+		node = new Node(_id, _label, _number);
 		nodes.push_back(node);
 	}
 }
