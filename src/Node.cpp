@@ -18,47 +18,66 @@ int Node::get_label() {
 	return label;
 }
 
-void Node::add_edge(Edge *edge) {
-	edges.push_back(edge);
+void Node::add_out_edge(Edge *edge) {
+	out_edges.push_back(edge);
+}
+void Node::add_in_edge(Edge *edge) {
+	in_edges.push_back(edge);
 }
 
-bool Node::is_connected(Node *node) {
-	for(std::vector<Edge *>::iterator it = edges.begin(); it != edges.end(); it++)
+int Node::is_connected(Node *node) {
+	for(std::vector<Edge *>::iterator it = out_edges.begin(); it != out_edges.end(); it++)
 		if((*it)->get_color() && node == (*it)->get_end())
-			return true;
+			return 1;
+    
+	for(std::vector<Edge *>::iterator it = in_edges.begin(); it != in_edges.end(); it++)
+		if((*it)->get_color() && node == (*it)->get_end())
+			return -1;
 	
-	return false;
+	return 0;
 }
 
-bool Node::is_connected_id(int _id) {
-	for(std::vector<Edge *>::iterator it = edges.begin(); it != edges.end(); it++)
+int Node::is_connected_id(int _id) {
+	for(std::vector<Edge *>::iterator it = out_edges.begin(); it != out_edges.end(); it++)
 		if((*it)->get_color() && _id == (*it)->get_end()->get_id())
-			return true;
+			return 1;
+    
+	for(std::vector<Edge *>::iterator it = in_edges.begin(); it != in_edges.end(); it++)
+		if((*it)->get_color() && _id == (*it)->get_end()->get_id())
+			return -1;
 	
-	return false;
+	return 0;
 }
 
 void Node::set_edge_color(Node *n_end, bool color) {
-	for(std::vector<Edge *>::iterator it = edges.begin(); it != edges.end(); it++)
+	for(std::vector<Edge *>::iterator it = out_edges.begin(); it != out_edges.end(); it++)
 		if((*it)->get_end() == n_end)
 			(*it)->set_color(color);
 }
 
 void Node::print() {
 	printf("%3d(%d): [", id, label);
-	for(std::vector<Edge *>::iterator it = edges.begin(); it != edges.end(); it++) {
+	for(std::vector<Edge *>::iterator it = out_edges.begin(); it != out_edges.end(); it++) {
 		printf("%d, ", (*it)->get_end()->id);
 	}
-	printf("]\n");
+	printf("] | [");
+	for(std::vector<Edge *>::iterator it = in_edges.begin(); it != in_edges.end(); it++) {
+		printf("%d, ", (*it)->get_start()->id);
+	}
+    printf("]\n");
 }
 
 
-Edge::Edge(Node * _end) {
+Edge::Edge(Node *_start, Node * _end) {
+    start = _start;
 	end = _end;
 	color = true; //true is white
 }
 Node *Edge::get_end() {
 	return end;
+}
+Node *Edge::get_start() {
+	return start;
 }
 bool Edge::get_color() {
 	return color;

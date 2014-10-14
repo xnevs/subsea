@@ -61,9 +61,11 @@ void Graph::add_edge(int start, int end) {
 			n_end = *it;
 	}
 	
-	if(n_start != NULL && n_end != NULL && !n_start->is_connected(n_end))
-		n_start->add_edge(new Edge(n_end));
-	//nodes[start]->add_edge(new Edge(nodes[end]));
+	if(n_start != NULL && n_end != NULL && !n_start->is_connected(n_end)) {
+        Edge *e = new Edge(n_start, n_end);
+		n_start->add_out_edge(e);
+        n_end->add_in_edge(e);
+    }
 }
 
 void Graph::set_edge_color(int start, int end, bool color) {

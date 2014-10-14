@@ -12,7 +12,7 @@
 #include <cstdio>
 
 
-std::pair<int, int> estimate_next(Graph *g, std::vector<int> &d, Node *w, Node *v) {
+std::pair<int, int> estimate_next(Graph *g, Node *w, Node *v) {
 	std::set<Node *> s;
 	s.insert(w);
 
@@ -28,7 +28,7 @@ std::pair<int, int> estimate_next(Graph *g, std::vector<int> &d, Node *w, Node *
 
 				if( !( (z==w && other==v) || (other==w && z==v) ) && z->is_connected(other)) {
 					ns.insert(other);
-					if(d[ v->get_id() ] > 0)
+					if(v->number > 0)
 						p++;
 				}
 			}
@@ -44,27 +44,29 @@ std::pair<int, int> estimate_next(Graph *g, std::vector<int> &d, Node *w, Node *
 	return std::pair<int, int> (INT_MAX, -s.size());
 }
 
-void visit(Graph *g, std::vector< std::pair<int, std::set<int> > > &h, std::vector<int> &d, int &vtime, Node *v1, Node *v2, Node *v) {
-	d[v->get_id()] = vtime;
+void visit(Graph *g, std::vector< std::pair<int, std::set<int> > > &h, int &vtime, Node *v1, Node *v2, Node *v) {
+    v->number = vtime;
 
 	traverse_history_pair_t traverse_history_pair;
 	traverse_history_pair.first = v->get_label();
 	
 	for(std::vector<Node *>::iterator it = g->get_nodes().begin(); it != g->get_nodes().end(); it++)
 		if(v->is_connected(*it))
-			if(d[(*it)->get_id()] > 0 && d[(*it)->get_id()] < d[v->get_id()])
-				traverse_history_pair.second.insert( d[(*it)->get_id()] );
+			if((*it)->number > 0 && (*it)->number < v->number )
+				traverse_history_pair.second.insert( (*it)->number );
 	
 	h.push_back(traverse_history_pair);
 	vtime++;
-
+    
+    
+    printf("a\n");
 	if(v == v1)
-		visit(g, h, d, vtime, v1, v2, v2);
+		visit(g, h, vtime, v1, v2, v2);
 	
 	std::vector<Node *> n0;
 	for(std::vector<Node *>::iterator it = g->get_nodes().begin(); it != g->get_nodes().end(); it++)
 		if(v->is_connected(*it))
-			if(d[ (*it)->get_id() ] == 0)
+			if((*it)->number == 0)
 				n0.push_back(*it);
 	
 	while(!n0.empty()) {
@@ -75,15 +77,15 @@ void visit(Graph *g, std::vector< std::pair<int, std::set<int> > > &h, std::vect
 		std::pair<int, int> crnt_estimate_next;
 
 		for(std::vector<Node *>::iterator it=n0.begin(); it!=n0.end(); it++) {
-			crnt_estimate_next = estimate_next(g, d, *it, v);
+			crnt_estimate_next = estimate_next(g, *it, v);
 			if( crnt_estimate_next < w_estimate_next) {
 				w = *it;
 				w_iterator = it;
 				w_estimate_next = crnt_estimate_next;
 			}
 		}
-		if(d[w->get_id()] == 0)
-			visit(g, h, d, vtime, v1, v2, w);
+		if(w->number == 0)
+			visit(g, h, vtime, v1, v2, w);
 
 		n0.erase(w_iterator);
 
@@ -94,11 +96,9 @@ void visit(Graph *g, std::vector< std::pair<int, std::set<int> > > &h, std::vect
 traverse_history_t traverse_history(Graph *g, Node *v1, Node *v2) {
 	traverse_history_t h; //traverse history is a vector of pairs of labels and Ni-s
 
-	std::vector<int> d (g->get_nodes().size(), 0);
-
 	int vtime = 1;
-
-	visit(g, h, d, vtime, v1, v2, v1);
+    
+	visit(g, h, vtime, v1, v2, v1);
 
 	return h;
 }

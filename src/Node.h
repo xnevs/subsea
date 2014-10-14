@@ -10,7 +10,10 @@ class Node {
 private:
 	int id;
 	int label;
-	std::vector<Edge *> edges;
+    
+	std::vector<Edge *> out_edges;
+	std::vector<Edge *> in_edges;
+    
 public:
 	int number;
 
@@ -20,10 +23,11 @@ public:
 	int get_id();
 	int get_label();
 
-	void add_edge(Edge *edge);
+	void add_out_edge(Edge *edge);
+	void add_in_edge(Edge *edge);
 
-	bool is_connected(Node *node);
-	bool is_connected_id(int _id);
+	int is_connected(Node *node);
+	int is_connected_id(int _id);
 	
 	void set_edge_color(Node *n_end, bool color);
 
@@ -32,12 +36,14 @@ public:
 
 class Edge {
 private:
+    Node *start;
 	Node *end;
 	bool color;
 public:
-	Edge(Node *_end);
+	Edge(Node *_start, Node *_end);
 
 	Node *get_end();
+    Node *get_start();
 	bool get_color();
 	void set_color(bool _color);
 };

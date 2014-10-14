@@ -16,7 +16,6 @@ void read_graph(Graph *g, FILE *f) {
 		for(int i=0; i<num_edges; i++) {
 			fread(&end, 1, 2, f);
 			g->add_edge(start, end);
-			g->add_edge(end, start);
 		}
 	}
 }
